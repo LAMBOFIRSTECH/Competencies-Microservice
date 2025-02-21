@@ -30,7 +30,7 @@ public class UnitCompetenceModel
     {
         // Arrange
         var competence = new Competence();
-        var guid = competence.GetGuid();
+        var guid = competence.ID;
 
         // Act & Assert
         Assert.Equal(Guid.Empty, guid);

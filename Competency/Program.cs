@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Competency.Interfaces;
 using Competency.Services;
+using Competency.Repositories;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +41,7 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: false, reloadOnChange: false);
 var item = builder.Configuration.GetSection("ConnectionStrings");
 var conStrings = item["DefaultConnection"];
-builder.Services.AddDbContext<CompetenciesMigrationContext>(opt => opt.UseInMemoryDatabase(conStrings));
+builder.Services.AddDbContext<CompetenciesMigrationContext>(opt => opt.UseInMemoryDatabase(conStrings!));
 builder.Services.AddControllersWithViews();
 builder.Services.AddRouting();
 builder.Services.AddHttpContextAccessor();
@@ -64,7 +67,24 @@ builder.Services.Configure<KestrelServerOptions>(options =>
         opt.ClientCertificateMode = ClientCertificateMode.NoCertificate; // Required Certificate dans les autres services c'est du allowCertificate
     });
 });
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracerProviderBuilder =>
+    {
+        tracerProviderBuilder
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("api-competencies"))
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddJaegerExporter(jaegerOptions =>
+            {
+                jaegerOptions.AgentHost = builder.Configuration["Jaeger:IpAddress"];
+                jaegerOptions.AgentPort = Int16.Parse(builder.Configuration["Jaeger:Port"]!);
+            });
+    });
+
 builder.Services.AddScoped<IHashicorpVaultService, HashicorpVaultService>();
+builder.Services.AddScoped<ICompetenceService, CompetenceService>();
+
+builder.Services.AddScoped<CompetenceRepository>();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddLogging();
 builder.Services.AddAuthorization();
@@ -100,14 +120,14 @@ builder.Services.AddAuthorization(options =>
                .AddAuthenticationSchemes("BasicAuthentication"));
  });
 var app = builder.Build();
-app.UseMiddleware<ContextPathMiddleware>("/lambo-skills-management");
+app.UseMiddleware<ContextPathMiddleware>("/lambo-skills-manager");
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(con =>
      {
-         con.SwaggerEndpoint("/lambo-skills-management/swagger/1/swagger.yml", "Competencies Management API");
+         con.SwaggerEndpoint("/lambo-skills-manager/swagger/1/swagger.yml", "Competencies Management API");
 
          con.RoutePrefix = string.Empty;
      });

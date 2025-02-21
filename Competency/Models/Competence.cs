@@ -6,7 +6,7 @@ namespace Competency.Models;
 public class Competence
 {
     [Key]
-    private Guid ID { get; }
+    public Guid ID { get; }
     [Required]
     [StringLength(100)]
     public string? Nom { get; set; }
@@ -16,9 +16,5 @@ public class Competence
     public enum Grade { Debutant, Intermédiaire, Senior, Expert }
     [Required]
     public Grade? Niveau { get; set; }
-
-    public Guid GetGuid()
-    {
-        return ID;
-    }
+    public bool Active = true;
 }

@@ -1,0 +1,97 @@
+openapi: 3.0.0
+info:
+  title: Competency API
+  version: 1.0.0
+  description: API documentation for the Competency system.
+paths:
+  /competencies:
+    get:
+      summary: Affiche la liste de toutes les compétences.
+      operationId: getCompetencies
+      responses:
+        '200':
+          description: A list of competencies.
+  /competency/{id}:
+    get:
+      summary: Affiche une compétence spécifique.
+      operationId: getCompetency
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A specific competency.
+  /competency:
+    post:
+      summary: Crée une compétence dans le système.
+      operationId: createCompetency
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Nom:
+                  type: string
+                  example: CI/CD
+                Libelle:
+                  type: string
+                  example: Système d'information
+                Niveau:
+                  type: string
+                  enum: [Debutant, Intermédiaire, Senior, Expert]
+                Active:
+                  type: boolean
+                  example: true
+      responses:
+        '201':
+          description: Competency created.
+components:
+  schemas:
+    Competence:
+      type: object
+      properties:
+        Nom:
+          type: string
+        Libelle:
+          type: string
+        Niveau:
+          type: string
+          enum: [Debutant, Intermédiaire, Senior, Expert]
+        Active:
+          type: boolean
+    CompetenceEmploye:
+      type: object
+      properties:
+        ID:
+          type: string
+          format: uuid
+        EmployeId:
+          type: string
+          format: uuid
+        Competence:
+          $ref: '#/components/schemas/Competence'
+        Niveau:
+          type: string
+          enum: [Debutant, Intermédiaire, Senior, Expert]
+    CompetenceFormation:
+      type: object
+      properties:
+        # Define properties for CompetenceFormation
+        # Assuming similar structure to CompetenceEmploye
+        ID:
+          type: string
+          format: uuid
+        FormationId:
+          type: string
+          format: uuid
+        Competence:
+          $ref: '#/components/schemas/Competence'
+        Niveau:
+          type: string
+          enum: [Debutant, Intermédiaire, Senior, Expert]
