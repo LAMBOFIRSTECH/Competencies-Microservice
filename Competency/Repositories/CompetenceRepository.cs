@@ -18,11 +18,7 @@ public class CompetenceRepository
         await dbContext.SaveChangesAsync();
         return competence;
     }
-    public async Task SetCompetency()
-    {
-        await dbContext.SaveChangesAsync();
-    }
-    public async Task DeleteGetCompetency()
+    public async Task SaveCompetencyInDatabase()
     {
         await dbContext.SaveChangesAsync();
     }

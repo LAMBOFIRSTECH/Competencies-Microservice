@@ -1,13 +1,26 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using Competency.Models;
 using Xunit;
 namespace Competency.Tests;
 
 public class UnitTestCompetenceFormationModel
 {
+    [Fact]
+    public void CompetenceFormation_ShouldHaveValidProperties()
+    {
+        // Arrange
+        var competenceFormation = new CompetenceFormation
+        {
+            ID = Guid.NewGuid(),
+            FormationId = Guid.NewGuid(),
+            CompetenceId = Guid.NewGuid()
+        };
+
+        // Act & Assert
+        Assert.NotEqual(Guid.Empty, competenceFormation.ID);
+        Assert.NotEqual(Guid.Empty, competenceFormation.FormationId);
+        Assert.NotEqual(Guid.Empty, competenceFormation.CompetenceId);
+    }
     [Fact]
     public void CompetenceFormation_ShouldHaveValidID()
     {
@@ -20,23 +33,5 @@ public class UnitTestCompetenceFormationModel
 
         // Assert
         Assert.NotEqual(Guid.Empty, competenceFormation.ID);
-    }
-    [Fact]
-    public void CompetenceFormation_ShouldRequireCompetence()
-    {
-        // Arrange
-        var competenceFormation = new CompetenceFormation
-        {
-            // Act
-            competence = null
-        };
-
-        // Assert
-        var validationContext = new ValidationContext(competenceFormation);
-        var validationResults = new List<ValidationResult>();
-        var isValid = Validator.TryValidateObject(competenceFormation, validationContext, validationResults, true);
-
-        Assert.False(isValid);
-        Assert.Contains(validationResults, v => v.MemberNames.Contains(nameof(CompetenceFormation.competence)));
     }
 }

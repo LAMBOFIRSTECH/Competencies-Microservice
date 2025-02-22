@@ -53,7 +53,7 @@ public class CompetenceService : ICompetenceService
             };
         }
         competence.Active = true;
-        await competenceRepository.SetCompetency();
+        await competenceRepository.SaveCompetencyInDatabase();
         return new CompetenceResult() { Response = true, Competence = competence, Message = "succesfull update competency" };
     }
     public async Task<CompetenceResult> DeleteGetCompetency(Guid id)
@@ -78,7 +78,7 @@ public class CompetenceService : ICompetenceService
             };
         }
         competence.Active = false;
-        await competenceRepository.DeleteGetCompetency();
+        await competenceRepository.SaveCompetencyInDatabase();
         return new CompetenceResult() { Response = true, Competence = competence, Message = "Competency has been successfull desactivated" };
     }
 }

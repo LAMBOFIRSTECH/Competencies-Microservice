@@ -18,7 +18,7 @@ public class JwtBearerAuthenticationMiddleware : AuthenticationHandler<JwtBearer
     private readonly IHashicorpVaultService vaultService;
     private readonly ILogger<JwtBearerAuthenticationMiddleware> log;
 
-    public JwtBearerAuthenticationMiddleware(IHashicorpVaultService vaultService,ILogger<JwtBearerAuthenticationMiddleware> log, IConfiguration configuration, IOptionsMonitor<JwtBearerOptions> options,
+    public JwtBearerAuthenticationMiddleware(IHashicorpVaultService vaultService, ILogger<JwtBearerAuthenticationMiddleware> log, IConfiguration configuration, IOptionsMonitor<JwtBearerOptions> options,
     ILoggerFactory logger,
     UrlEncoder encoder,
     ISystemClock clock)
@@ -26,7 +26,7 @@ public class JwtBearerAuthenticationMiddleware : AuthenticationHandler<JwtBearer
     {
         this.configuration = configuration;
         this.log = log;
-        this.vaultService=vaultService;
+        this.vaultService = vaultService;
     }
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()

@@ -5,7 +5,6 @@ using Competency.DataBaseContext;
 using Competency.Middlewares;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Competency.Interfaces;
@@ -13,6 +12,7 @@ using Competency.Services;
 using Competency.Repositories;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,11 +80,15 @@ builder.Services.AddOpenTelemetry()
                 jaegerOptions.AgentPort = Int16.Parse(builder.Configuration["Jaeger:Port"]!);
             });
     });
-
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IHashicorpVaultService, HashicorpVaultService>();
 builder.Services.AddScoped<ICompetenceService, CompetenceService>();
+builder.Services.AddScoped<ICompetenceEmployeService, CompetenceEmployeService>();
 
 builder.Services.AddScoped<CompetenceRepository>();
+builder.Services.AddScoped<CompetenceEmployeRepository>();
+builder.Services.AddScoped<CompetenceFormationRepository>();
+
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddLogging();
 builder.Services.AddAuthorization();

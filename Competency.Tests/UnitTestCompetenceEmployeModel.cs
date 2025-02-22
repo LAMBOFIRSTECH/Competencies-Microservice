@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Competency.Models;
 using Xunit;
 namespace Competency.Tests;
@@ -22,5 +23,23 @@ public class UnitTestCompetenceEmployeModel
         var validationContext = new ValidationContext(competenceEmploye, null, null);
         var isValid = Validator.TryValidateObject(competenceEmploye, validationContext, validationResults, true);
         Assert.True(isValid);
+    }
+    [Fact]
+    public void CompetenceEmploye_ShouldHaveValidProperties()
+    {
+        // Arrange
+        var competenceEmploye = new CompetenceEmploye
+        {
+            ID = Guid.NewGuid(),
+            EmployeId = Guid.NewGuid(),
+            CompetenceId = Guid.NewGuid(),
+            Niveau = CompetenceEmploye.Grade.Intermédiaire
+        };
+
+        // Act & Assert
+        Assert.NotEqual(Guid.Empty, competenceEmploye.ID);
+        Assert.NotEqual(Guid.Empty, competenceEmploye.EmployeId);
+        Assert.NotEqual(Guid.Empty, competenceEmploye.CompetenceId);
+        Assert.Equal(CompetenceEmploye.Grade.Intermédiaire, competenceEmploye.Niveau);
     }
 }

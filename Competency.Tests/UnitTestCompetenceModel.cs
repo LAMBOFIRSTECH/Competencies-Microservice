@@ -16,13 +16,13 @@ public class UnitCompetenceModel
         {
             Nom = "Programming",
             Libelle = "Ability to write code",
-            Niveau = Competence.Grade.Intermédiaire
+            Niveau = Competence.NiveauCompetence.Intermédiaire
         };
         // Act & Assert
         Assert.NotNull(competence);
         Assert.Equal("Programming", competence.Nom);
         Assert.Equal("Ability to write code", competence.Libelle);
-        Assert.Equal(Competence.Grade.Intermédiaire, competence.Niveau);
+        Assert.Equal(Competence.NiveauCompetence.Intermédiaire, competence.Niveau);
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class UnitCompetenceModel
         var competence = new Competence
         {
             Libelle = "Ability to write code",
-            Niveau = Competence.Grade.Intermédiaire
+            Niveau = Competence.NiveauCompetence.Intermédiaire
         };
 
         // Act
@@ -60,7 +60,7 @@ public class UnitCompetenceModel
         var competence = new Competence
         {
             Nom = "Programming",
-            Niveau = Competence.Grade.Intermédiaire
+            Niveau = Competence.NiveauCompetence.Intermédiaire
         };
 
         // Act
