@@ -12,20 +12,18 @@ public class CompetenceRepository
     {
         return dbContext.Competences;
     }
-    public async Task<Competence> CreateGetCompetency(Competence competence)
+    public async Task<Competence> CreateCompetency(Competence competence)
     {
         await dbContext.Competences.AddAsync(competence);
         await dbContext.SaveChangesAsync();
         return competence;
     }
-    public async Task SetCompetency(Competence competence)
+    public async Task SetCompetency()
     {
         await dbContext.SaveChangesAsync();
     }
-    public async Task DeleteGetCompetency(Guid id)
+    public async Task DeleteGetCompetency()
     {
-        var competence = dbContext.Competences.Where(c => c.ID == id && c.Active.Equals(true)).FirstOrDefault();
-        dbContext.Competences.Remove(competence!);
         await dbContext.SaveChangesAsync();
     }
 }

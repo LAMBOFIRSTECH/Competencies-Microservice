@@ -110,13 +110,12 @@ public class JwtBearerAuthenticationMiddleware : AuthenticationHandler<JwtBearer
             rsa.ImportFromPem(formattedPublicKeyPem);
             var rsaSecurityKey = new RsaSecurityKey(rsa);
             log.LogInformation("La clé publique a été récupérée et formatée avec succès.");
-
             return rsaSecurityKey;
         }
         catch (FormatException ex)
         {
             log.LogError(ex, "Erreur lors de la conversion de la clé publique Base64 ");
-            throw new Exception("Erreur lors de la conversion de la clé publique Base64.", ex);
+            throw new FormatException("Erreur lors de la conversion de la clé publique Base64.", ex);
         }
         catch (Exception ex)
         {

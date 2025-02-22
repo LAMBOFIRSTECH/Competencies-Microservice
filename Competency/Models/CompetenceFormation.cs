@@ -8,7 +8,7 @@ public class CompetenceFormation
     [Key]
     public Guid ID { get; set; }
     [Required]
-    public Guid formationId { get; set; }
+    public Guid FormationId { get; set; }
     [Required]
-    public Competence? competence { get; set; }
+    public Guid CompetenceId { get; set; }
 }

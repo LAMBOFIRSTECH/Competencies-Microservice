@@ -7,5 +7,5 @@ public interface ICompetenceService
     Task<Competence?> GetCompetency(Guid id);
     Task<Competence> CreateCompetency(Competence competence);
     Task<CompetenceResult> SetCompetency(Guid id);
-    Task DeleteGetCompetency(Guid id);
+    Task<CompetenceResult> DeleteGetCompetency(Guid id);
 }

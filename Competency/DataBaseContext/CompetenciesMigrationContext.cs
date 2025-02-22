@@ -13,23 +13,21 @@ public class CompetenciesMigrationContext : DbContext
     public DbSet<CompetenceFormation> CompetenceFormations { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Competence>()
-		.HasKey(c=> c.ID);
+        modelBuilder.Entity<CompetenceEmploye>()
+        .HasKey(c => c.ID);
+        modelBuilder.Entity<CompetenceEmploye>()
+        .Property(ce => ce.CompetenceId) // Chaque enregistrement doit être associé à une compétence existante
+        .IsRequired();
+        modelBuilder.Entity<CompetenceEmploye>()
+        .Property(ce => ce.EmployeId) // Chaque compétence doit être associée à un employé
+        .IsRequired();
+        modelBuilder.Entity<CompetenceFormation>()
+       .HasKey(cf => cf.ID);
+        modelBuilder.Entity<CompetenceFormation>()
+      .Property(cf => cf.FormationId)
+      .IsRequired();
+        modelBuilder.Entity<CompetenceFormation>()
+      .Property(cf => cf.CompetenceId)
+      .IsRequired();
     }
-    // 	modelBuilder.Entity<Utilisateur>()
-    // 	   .HasMany(u => u.LesTaches)
-    // 	   .WithOne(t => t.Utilisateur)
-    // 	   .HasForeignKey(t => t.UserId)
-    // 	   .IsRequired()
-    // 	   .OnDelete(DeleteBehavior.Cascade);
-    // 	modelBuilder.Entity<Tache>();
-    // 	modelBuilder.Entity<Projet>()
-    // 	   .HasIndex(p => p.Code)
-    // 	   .IsUnique(); // Montre que c'est une clé candidate
-    // 	base.OnModelCreating(modelBuilder);
-    // 	modelBuilder.Entity<Employe>()
-    // 	   .HasIndex(e => e.Matricule)
-    // 	   .IsUnique(); // Montre que c'est une clé candidate
-    // 	base.OnModelCreating(modelBuilder);
-    // }
 }

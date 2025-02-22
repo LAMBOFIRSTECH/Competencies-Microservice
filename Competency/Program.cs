@@ -89,9 +89,6 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddLogging();
 builder.Services.AddAuthorization();
 
-builder.Services.AddAuthentication("BasicAuthentication")
-    .AddScheme<AuthenticationSchemeOptions, AuthentificationBasicMiddleware>("BasicAuthentication", _ => { });
-
 builder.Services.AddAuthentication("JwtAuthorization")
     .AddScheme<JwtBearerOptions, JwtBearerAuthenticationMiddleware>("JwtAuthorization", options =>
     {
@@ -114,10 +111,6 @@ builder.Services.AddAuthorization(options =>
          policy.RequireRole("Administrateur")
                .RequireAuthenticatedUser()
                .AddAuthenticationSchemes("JwtAuthorization"));
-     options.AddPolicy("UserPolicy", policy =>
-        policy.RequireRole("Utilisateur")
-               .RequireAuthenticatedUser()
-               .AddAuthenticationSchemes("BasicAuthentication"));
  });
 var app = builder.Build();
 app.UseMiddleware<ContextPathMiddleware>("/lambo-skills-manager");
@@ -141,6 +134,6 @@ app.UseEndpoints(endpoints =>
  {
      endpoints.MapControllers();
      endpoints.MapHealthChecks("/health");
-     endpoints.MapGet("/version", async context => await context.Response.WriteAsync(app.Configuration.GetValue<string>("Kestrel:ApiVersion")));
+     endpoints.MapGet("/version", async context => await context.Response.WriteAsync(app.Configuration.GetValue<string>("Kestrel:ApiVersion")!));
  });
 app.Run();

@@ -9,7 +9,7 @@ public class CompetenceEmploye
     public Guid ID { get; set; }
     [Required]
     public Guid EmployeId { get; set; }
-    public Competence? Competence { get; set; }
+    public Guid CompetenceId { get; set; }
     public enum Grade { Debutant, Intermédiaire, Senior, Expert }
     [Required]
     public Grade? Niveau { get; set; }

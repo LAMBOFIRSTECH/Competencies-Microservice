@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Competency.Middlewares
 {
-	public class ContextPathMiddleware
+    public class ContextPathMiddleware
 	{
 		private readonly RequestDelegate _next;
 		private readonly PathString _contextPath;

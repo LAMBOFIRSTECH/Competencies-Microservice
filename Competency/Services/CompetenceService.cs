@@ -25,28 +25,60 @@ public class CompetenceService : ICompetenceService
     }
     public async Task<Competence?> GetCompetency(Guid id)
     {
-        return (await GetCompetencies(query => query.Where(c => c.Active.Equals(true) && c.ID == id))).FirstOrDefault();
+        return (await GetCompetencies(query => query.Where(c => c.Active == true && c.ID == id))).FirstOrDefault();
     }
     public async Task<Competence> CreateCompetency(Competence competence)
     {
-        return await competenceRepository.CreateGetCompetency(competence);
+        return await competenceRepository.CreateCompetency(competence);
     }
     public async Task<CompetenceResult> SetCompetency(Guid id)
     {
-        var competence = (await GetCompetencies(query => query.Where(c => c.Active.Equals(true) && c.ID == id))).FirstOrDefault();
+        var competence = (await GetCompetencies(query => query.Where(c => c.ID == id))).FirstOrDefault();
         if (competence is null)
+        {
             return new CompetenceResult()
             {
                 Response = false,
                 Competence = null,
-                Message = "Not found or comptency status is not actiated"
+                Message = "Not found"
             };
-        
-        await competenceRepository.SetCompetency(competence!);
-        return new CompetenceResult() { Response = true, Competence = competence, Message="succesfull update competency" };
+        }
+        if (competence.Active is true)
+        {
+            return new CompetenceResult()
+            {
+                Response = true,
+                Competence = competence,
+                Message = "Comptency status is already activated"
+            };
+        }
+        competence.Active = true;
+        await competenceRepository.SetCompetency();
+        return new CompetenceResult() { Response = true, Competence = competence, Message = "succesfull update competency" };
     }
-    public async Task DeleteGetCompetency(Guid id)
+    public async Task<CompetenceResult> DeleteGetCompetency(Guid id)
     {
-        await competenceRepository.DeleteGetCompetency(id);
+        var competence = (await GetCompetencies(query => query.Where(c => c.ID == id))).FirstOrDefault();
+        if (competence is null)
+        {
+            return new CompetenceResult()
+            {
+                Response = false,
+                Competence = null,
+                Message = "Not found"
+            };
+        }
+        if (competence.Active is false)
+        {
+            return new CompetenceResult()
+            {
+                Response = false,
+                Competence = competence,
+                Message = "Comptency status is already desactivated"
+            };
+        }
+        competence.Active = false;
+        await competenceRepository.DeleteGetCompetency();
+        return new CompetenceResult() { Response = true, Competence = competence, Message = "Competency has been successfull desactivated" };
     }
 }
