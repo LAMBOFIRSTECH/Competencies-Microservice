@@ -1,7 +1,7 @@
 # Image de base pour l'exécution
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 8081
+EXPOSE 8083
 # Phase de préparation (SDK) - Utiliser l'image SDK pour la publication
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
@@ -19,7 +19,7 @@ COPY --from=build /app .
 # Copier les fichiers de configuration nécessaires
 COPY Competency/appsettings.* . 
 # Variables d'environnement
-ENV ASPNETCORE_URLS=http://+:8081
+ENV ASPNETCORE_URLS=http://+:8083
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/etc/ssl/certs/localhost.pfx
 # Point d'entrée de l'application
